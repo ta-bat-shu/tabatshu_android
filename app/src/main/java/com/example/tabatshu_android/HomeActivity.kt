@@ -40,11 +40,5 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // QR 렌트 버튼 참조 추가
-        val rentBikeButton = findViewById<ImageButton>(R.id.rent_bike)
-        rentBikeButton.setOnClickListener {
-            val intent = Intent(this, RentBikeActivity::class.java)
-            startActivity(intent)
-        }
     }
 }
