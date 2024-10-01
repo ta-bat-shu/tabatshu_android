@@ -4,13 +4,33 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Message
 import android.view.View
+import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.Toast
 import android.widget.ImageButton
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.POST
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.http.Headers
+
+data class LoginRequest(val username: String, val password: String)
+data class LoginResponse(val success: Boolean, val message: String)
+
+interface ApiService{
+    @Headers("Content-Type: application/json")
+    @POST("/login")
+    fun login(@Body request: LoginRequest): Call<LoginResponse>
+}
+
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,19 +54,36 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        // btn_login 참조 추가
-        val btnLogin = findViewById<ImageButton>(R.id.login_bt)
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://192.168.1.115:5000")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-        btnLogin.setOnClickListener {
-            // 버튼 클릭 시 실행할 코드
-            val toast = Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT)
+        val api = retrofit.create(ApiService::class.java)
 
-            // Toast 메시지를 하단 중앙에 위치시키기
-            toast.setGravity(android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL, 0, 100)
-            toast.show()
+        val loginButton = findViewById<ImageButton>(R.id.login_bt)
 
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-        }
-    }
-}
+        loginButton.setOnClickListener {
+            val username = findViewById<EditText>(R.id.login_id).text.toString()
+            val password = findViewById<EditText>(R.id.login_pw).text.toString()
+            // Create the login request
+            val loginRequest = LoginRequest(username, password)
+
+            // Make the API call
+            api.login(loginRequest).enqueue(object : Callback<LoginResponse> {
+                override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                val loginResponse = response.body()
+                if (loginResponse?.success == true) {
+                    // Login successful, navigate to the next screen
+                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                    startActivity(intent)
+                    Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
+                    finish()
+                    } else {
+                    // Show error message
+                    Toast.makeText(this@LoginActivity, loginResponse?.message?: "로그인 실패", Toast.LENGTH_SHORT).show()
+                }
+                }
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    Toast.makeText(this@LoginActivity, "Failed to connect", Toast.LENGTH_SHORT).show()        }
+            })}}}
