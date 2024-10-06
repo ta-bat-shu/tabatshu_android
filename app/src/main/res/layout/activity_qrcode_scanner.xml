@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 카메라 프리뷰가 표시될 영역 -->
+    <FrameLayout
+        android:id="@+id/cameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- QR 코드 이미지 뷰 -->
+    <ImageView
+        android:id="@+id/qrCodeImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <!-- QR 코드 벡터 드로어블 또는 이미지 파일을 배경으로 추가 -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/qr_scan"
+    android:scaleType="fitXY" />
+
+</RelativeLayout>
