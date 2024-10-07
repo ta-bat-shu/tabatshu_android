@@ -39,6 +39,12 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, FindBikeActivity::class.java)
             startActivity(intent)
         }
+        // QR 코드 버튼 추가
+        val qrButton = findViewById<ImageButton>(R.id.rent_bike)
+        qrButton.setOnClickListener {
+            val intent = Intent(this, QRCodeScannerActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 }

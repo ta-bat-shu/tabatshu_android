@@ -52,7 +52,7 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/rent_bike"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintHorizontal_bias="0.66"
         app:layout_constraintStart_toEndOf="@+id/find_bike"
         app:layout_constraintTop_toBottomOf="@+id/mileage"
         tools:ignore="SpeakableTextPresentCheck" />
