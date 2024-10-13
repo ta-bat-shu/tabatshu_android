@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="321dp"
+    android:height="190dp"
+    android:viewportWidth="321"
+    android:viewportHeight="190">
+    <path
+        android:fillColor="#FFFC9332"
+        android:pathData="M0 55.45c0-16.57 13.43-30 30-30h261c16.57 0 30 13.43 30 30v104.54c0 16.57-13.43 30-30 30h-261c-16.57 0-30-13.43-30-30z"/>
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M53.5 70.08h3.14v23.14H53.5V70.08Z"/>
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M145.14 155.96h1.66v2.32h-1.66v-2.32Z"/>
+    <!-- 나머지 path 요소는 여기에 계속 추가 -->
+</vector>

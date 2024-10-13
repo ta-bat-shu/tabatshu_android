@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">tabatshu_android</string>
+    <string name="my_vector_image_desc">Vector image description</string>
+    <string name="menu_button_description">메뉴 버튼</string> <!-- 여기에 추가 -->
+    <string name="report_button_description">신고하기 버튼</string>
 </resources>
+
