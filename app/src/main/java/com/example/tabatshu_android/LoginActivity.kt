@@ -20,6 +20,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import com.example.tabatshu_android.user_id
+import com.example.tabatshu_android.retrofit
 
 // 서버로 보낼 로그인 요청 데이터 클래스
 data class LoginRequest(val username: String, val password: String)
@@ -28,11 +30,9 @@ data class LoginRequest(val username: String, val password: String)
 data class LoginResponse(val success: Boolean, val message: String, val role: String)
 
 // API 인터페이스 정의
-interface ApiService {
-    @Headers("Content-Type: application/json")
-    @POST("/login")
-    fun login(@Body request: LoginRequest): Call<LoginResponse>
-}
+//interface ApiService {
+//
+//}
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,10 +55,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // Retrofit 초기화
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.115:5000")  // 서버 주소
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("http://10.0.2.2:5000")  // 서버 주소
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
 
         val api = retrofit.create(ApiService::class.java)
 
@@ -78,6 +78,7 @@ class LoginActivity : AppCompatActivity() {
                     val loginResponse = response.body()
 
                     if (loginResponse?.success == true) {
+                        user_id = username
                         // 로그인 성공, 역할에 따라 다른 화면으로 이동
                         when (loginResponse.role) {
                             "admin" -> {

@@ -46,6 +46,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0") // 최신 버전으로 업데이트
     implementation("com.google.zxing:core:3.4.1") // 최신 버전으로 업데이트
     testImplementation(libs.junit)
