@@ -11,6 +11,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.Toast
 import android.widget.ImageButton
+import android.widget.EditText
+
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,19 +36,33 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        // btn_login 참조 추가
+        // btn_login, EditText 참조 추가
         val btnLogin = findViewById<ImageButton>(R.id.login_bt)
+        val editTextId = findViewById<EditText>(R.id.login_id)
+        val editTextPw = findViewById<EditText>(R.id.login_pw)
 
+        // 로그인 버튼 클릭 시 동작
         btnLogin.setOnClickListener {
-            // 버튼 클릭 시 실행할 코드
-            val toast = Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT)
+            val inputId = editTextId.text.toString()
+            val inputPw = editTextPw.text.toString()
 
-            // Toast 메시지를 하단 중앙에 위치시키기
-            toast.setGravity(android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL, 0, 100)
-            toast.show()
-
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+            // admin/adminpassword로 로그인 시 ManagerHomeActivity로 이동
+            if (inputId == "admin" && inputPw == "adminpassword") {
+                val intent = Intent(this, ManagerHomeActivity::class.java)
+                startActivity(intent)
+            }
+            // username/userpassword로 로그인 시 HomeActivity로 이동
+            else if (inputId == "username" && inputPw == "userpassword") {
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
+            } else {
+                // 로그인 실패 시 Toast 메시지 표시
+                val toast = Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT)
+                toast.setGravity(android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL, 0, 100)
+                toast.show()
+            }
         }
     }
 }
+
+

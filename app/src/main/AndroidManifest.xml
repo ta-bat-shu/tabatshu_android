@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true" />
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -18,44 +19,62 @@
         android:theme="@style/Theme.Tabatshu_android"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".RescuecheckActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ObjectcheckActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".LogincheckActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ManagerHomeActivity"
+            android:exported="true"/>
+        <activity
             android:name=".ReportActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".QRSuccessActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".QRFalseActivity"
-            android:exported="false" />
-
+            android:exported="false"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCjh6QpfuLvJjhaopLS8CICmXHPM6-Cpbs" />
-
+            android:value="YOUR_API_KEY_HERE"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".QRCodeScannerActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".FindBikeActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".HomeActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
-            tools:replace="android:screenOrientation" />
+            tools:replace="android:screenOrientation"/>
+        <!-- 촬영된 사진을 저장하는 프로바이더 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.tabatshu_android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path"/>
+        </provider>
     </application>
-
 </manifest>
