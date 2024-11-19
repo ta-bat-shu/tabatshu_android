@@ -1,0 +1,122 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ImageView
+            android:id="@+id/up_tab2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.005"
+            app:srcCompat="@drawable/up_tab" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="331dp"
+            android:layout_height="274dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="76dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/profile" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="308dp"
+            android:layout_height="326dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageView2"
+            app:srcCompat="@drawable/manager_basic" />
+
+        <ImageButton
+            android:id="@+id/menu2"
+            android:layout_width="69dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="304dp"
+            android:layout_marginTop="8dp"
+            android:background="#4BFFFFFF"
+            android:contentDescription="@string/menu_button_description"
+            android:src="@drawable/menu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/Logincheck"
+            android:layout_width="210dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="44dp"
+            android:background="#FEF6EF"
+            android:rotationX="-4"
+            android:text="로그인 관리"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.467"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+        <TextView
+            android:id="@+id/objectcheck"
+            android:layout_width="210dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="16dp"
+            android:background="#FEF6EF"
+            android:rotationX="-4"
+            android:text="물품 관리"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.467"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rescuecheck" />
+
+        <TextView
+            android:id="@+id/logout"
+            android:layout_width="210dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="16dp"
+            android:background="#FEF6EF"
+            android:rotationX="-4"
+            android:text="로그아웃"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.467"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/objectcheck" />
+
+        <TextView
+            android:id="@+id/rescuecheck"
+            android:layout_width="210dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="24dp"
+            android:background="#FEF6EF"
+            android:rotationX="-4"
+            android:text="신고 데이터 조회"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.467"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Logincheck" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

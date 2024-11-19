@@ -2,25 +2,30 @@
     <item
         android:id="@+id/menu_item_login"
         android:title="나의 정보"
+        android:titleTextColor="#000000"
         android:icon="@drawable/tab_menu" />
 
     <item
         android:id="@+id/menu_item_charge"
         android:title="충전하기"
+        android:titleTextColor="#000000"
         android:icon="@drawable/tab_menu" />
 
     <item
         android:id="@+id/menu_item_service"
         android:title="서비스 안내"
+        android:titleTextColor="#000000"
         android:icon="@drawable/tab_menu" />
 
     <item
         android:id="@+id/menu_item_report"
         android:title="신고하기"
+        android:titleTextColor="#000000"
         android:icon="@drawable/tab_menu" />
 
     <item
         android:id="@+id/menu_item_help"
         android:title="고객센터"
+        android:titleTextColor="#000000"
         android:icon="@drawable/tab_menu" />
 </menu>

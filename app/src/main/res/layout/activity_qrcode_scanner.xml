@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
+    <!-- 카메라 프리뷰가 표시될 영역 -->
     <FrameLayout
         android:id="@+id/cameraPreview"
         android:layout_width="match_parent"
@@ -13,7 +13,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:contentDescription="@null"
             android:src="@drawable/qr_scan" />
     </FrameLayout>
 
@@ -22,9 +21,8 @@
         android:id="@+id/qrCodeImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@null"
         android:visibility="gone" />
 
-
+    <!-- QR 코드 벡터 드로어블 또는 이미지 파일을 배경으로 추가 -->
 
 </RelativeLayout>

@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_item_login_manage"
+        android:icon="@drawable/tab_menu"
+        android:titleTextColor="#000000"
+        android:title="로그인 관리" />
+
+    <item
+        android:id="@+id/menu_item_object_manage"
+        android:icon="@drawable/tab_menu"
+        android:titleTextColor="#000000"
+        android:title="물품관리" />
+
+    <item
+        android:id="@+id/menu_item_rescue_data_manage"
+        android:icon="@drawable/tab_menu"
+        android:titleTextColor="#000000"
+        android:title="신고 데이터 조회" />
+
+    <item
+        android:id="@+id/menu_item_admin_logout"
+        android:icon="@drawable/tab_menu"
+        android:titleTextColor="#000000"
+        android:title="로그아웃" />
+
+</menu>
