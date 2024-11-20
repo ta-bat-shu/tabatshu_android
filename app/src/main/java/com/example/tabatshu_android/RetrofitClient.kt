@@ -4,12 +4,20 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
+
+    private val logging = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY // 모든 요청/응답 로깅
+    }
+
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(logging)
+        .build()
+
     private val retrofit = Retrofit.Builder()
-//        .baseUrl("http://192.168.0.57:5000")
-        .baseUrl("http://10.0.2.2:5000")  // 서버 주소
+        .baseUrl("http://192.168.1.115:5000") // Flask 서버 URL
+        .client(client) // OkHttpClient 추가
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

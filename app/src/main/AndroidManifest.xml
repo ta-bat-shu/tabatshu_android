@@ -3,6 +3,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -53,7 +55,7 @@
             android:exported="false"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY_HERE" />  <!-- API 키는 보안상의 이유로 하드코딩하지 않는 것이 좋습니다 -->
+            android:value="AIzaSyCjh6QpfuLvJjhaopLS8CICmXHPM6-Cpbs" />  <!-- API 키는 보안상의 이유로 하드코딩하지 않는 것이 좋습니다 -->
 
         <activity
             android:name=".MainActivity"

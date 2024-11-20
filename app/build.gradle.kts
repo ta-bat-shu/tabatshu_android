@@ -43,22 +43,31 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+    // Google Maps
     implementation("com.google.android.gms:play-services-maps:18.0.2")
     implementation("com.google.android.gms:play-services-location:21.3.0")
+
+    // Retrofit and Gson
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0") // 최신 버전으로 업데이트
-    implementation("com.google.zxing:core:3.4.1") // 최신 버전으로 업데이트
+
+    // QR Code Libraries
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation("com.google.zxing:core:3.4.1")
+
+    // Glide for image loading
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+
+    // Google Maps Utils for Clustering
+    implementation("com.google.maps.android:android-maps-utils:2.2.5")
+
+    // Unit Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("androidx.activity:activity-ktx:1.7.0")
-    // QR 코드 라이브러리
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0") // 최신 버전으로 업데이트
-    implementation("com.google.zxing:core:3.4.1") // 최신 버전으로 업데이트
 
-    // Retrofit과 Gson 추가
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    // CardView
+    implementation("androidx.cardview:cardview:1.0.0")
 }

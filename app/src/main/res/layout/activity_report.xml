@@ -39,7 +39,9 @@
         android:layout_marginTop="28dp"
         android:ems="10"
         android:hint="메세지"
+        android:textColorHint="#000000"
         android:inputType="text"
+        android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextText4" />
 
@@ -50,8 +52,10 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="104dp"
         android:ems="10"
-        android:hint="Name"
+        android:hint="아이디"
+        android:textColorHint="#000000"
         android:inputType="text"
+        android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,7 +67,9 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="신고 유형"
+        android:textColorHint="#000000"
         android:inputType="text"
+        android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextText2" />
 
@@ -73,11 +79,15 @@
         android:layout_height="50dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="8dp"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
         android:ems="10"
-        android:hint="이미지 선택"
-        android:inputType="text"
+        android:text="이미지 선택"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextText3" />
+
 
     <ImageButton
         android:id="@+id/report_button"
@@ -99,8 +109,10 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="4dp"
         android:ems="10"
-        android:hint="Email"
+        android:hint="자전거 번호"
+        android:textColorHint="#000000"
         android:inputType="text"
+        android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextText" />
 
@@ -138,4 +150,6 @@
         android:src="@drawable/menu"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
