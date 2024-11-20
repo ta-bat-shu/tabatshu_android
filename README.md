@@ -11,7 +11,6 @@
    4. Toast 메세지
    5. AlertDialog
    6. 사진 촬영 기능
-<br>
 <h2>1. 기능 및 사용 라이브러리</h2>
 <h3>Zxing 라이브러리</h3>
 <ul>
