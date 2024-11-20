@@ -4,13 +4,14 @@
  <li>Kotlin을 사용하여 코드 작성이 되었습니다.</li>
 </ul>
 <h2>📖 목차</h2>
-1. 기능 및 사용 라이브러리 + 주요 함수
-   1. Zxing 라이브러리
-   2. MediaPlayer
-   3. PopupMenu
-   4. Toast 메세지
-   5. AlertDialog
-   6. 사진 촬영 기능
+<ol>기능 및 사용 라이브러리
+ <li>Zxing 라이브러리</li>
+ <li>Mediaplayer</li>
+ <li>PopupMenu</li>
+ <li>Toast 메세지</li>
+ <li>AlertDialog</li>
+ <li>사진 촬영 기능</li>
+</ol>
 <h2>1. 기능 및 사용 라이브러리</h2>
 <h3>Zxing 라이브러리</h3>
 <ul>
