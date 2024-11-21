@@ -96,14 +96,20 @@ class HomeActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.menu_item_login -> {
                 showToast("나의 정보 선택")
+                val intent = Intent(this, MyProfileActivity::class.java)
+                startActivity(intent)
                 true
             }
             R.id.menu_item_charge -> {
                 showToast("충전하기 선택")
+                val intent = Intent(this, ChargeActivity::class.java)
+                startActivity(intent)
                 true
             }
             R.id.menu_item_service -> {
                 showToast("서비스 안내 선택")
+                val intent = Intent(this, ServiceActivity::class.java)
+                startActivity(intent)
                 true
             }
             R.id.menu_item_report -> {
@@ -115,6 +121,8 @@ class HomeActivity : AppCompatActivity() {
             }
             R.id.menu_item_help -> {
                 showToast("고객센터 선택")
+                val intent = Intent(this, HelpActivity::class.java)
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
