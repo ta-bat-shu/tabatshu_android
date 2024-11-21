@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.bumptech.glide.Glide
+import com.example.tabatshu_android.GlobalVariables.retrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -91,18 +92,40 @@ class RescuecheckActivity : AppCompatActivity() {
             }
 
             // 신고 정보 텍스트 추가
-            val textView = TextView(this).apply {
+            val infoTextView = TextView(this).apply {
                 text = """
-                    자전거 ID: ${report.bikeId}
-                    신고 유형: ${report.category}
-                    내용: ${report.contents}
-                    날짜: ${report.date}
-                """.trimIndent()
+                날짜: ${report.date}
+                자전거 ID: ${report.bikeId}
+                신고 유형: ${report.category}
+            """.trimIndent()
                 setTextColor(Color.BLACK)
                 textSize = 16f
-                setPadding(0, 16.dpToPx(), 0, 16.dpToPx())
+                setPadding(0, 16.dpToPx(), 0, 10.dpToPx())
             }
-            innerContainer.addView(textView)
+            innerContainer.addView(infoTextView)
+
+            // 신고 내용 부분만 흰색 배경을 가진 컨테이너
+            val contentContainer = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setBackgroundColor(Color.WHITE) // 하얀색 배경
+                setPadding(16.dpToPx(), 16.dpToPx(), 16.dpToPx(), 16.dpToPx())
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(0, 0, 0, 0) // 상단 여백 추가
+                }
+            }
+
+            // 신고 내용 텍스트 추가
+            val contentTextView = TextView(this).apply {
+                text = "내용: ${report.contents}" // 내용 추가
+                setTextColor(Color.BLACK)
+                textSize = 16f
+            }
+
+            contentContainer.addView(contentTextView) // 흰색 배경 안에 내용 추가
+            innerContainer.addView(contentContainer) // 흰색 배경 컨테이너를 내부 컨테이너에 추가
 
             // 내부 컨테이너를 CardView에 추가
             cardView.addView(innerContainer)
@@ -111,6 +134,7 @@ class RescuecheckActivity : AppCompatActivity() {
             reportContainer.addView(cardView)
         }
     }
+
 
     // dp를 px로 변환하는 확장 함수
     private fun Int.dpToPx(): Int {

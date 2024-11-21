@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import com.example.tabatshu_android.GlobalVariables.retrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

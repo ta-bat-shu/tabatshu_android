@@ -15,10 +15,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.005"
+        app:layout_constraintVertical_bias="0.048"
         app:srcCompat="@drawable/up_tab" />
 
     <ImageView
@@ -26,68 +26,63 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="88dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/reportbase" />
-
-    <EditText
-        android:id="@+id/editTextText5"
-        android:layout_width="298dp"
-        android:layout_height="144dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="28dp"
-        android:ems="10"
-        android:hint="메세지"
-        android:textColorHint="#000000"
-        android:inputType="text"
-        android:textColor="#000000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextText4" />
 
     <EditText
         android:id="@+id/editTextText"
         android:layout_width="296dp"
         android:layout_height="50dp"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="112dp"
         android:ems="10"
         android:hint="아이디"
-        android:textColorHint="#000000"
         android:inputType="text"
-        android:textColor="#000000"
+        android:textColor="#626161"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextText2"
+        android:layout_width="296dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="자전거 번호"
+        android:inputType="text"
+        android:textColor="#626161"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextText" />
 
     <EditText
         android:id="@+id/editTextText3"
         android:layout_width="296dp"
         android:layout_height="50dp"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="신고 유형"
-        android:textColorHint="#000000"
         android:inputType="text"
-        android:textColor="#000000"
+        android:textColor="#626161"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextText2" />
 
-    <EditText
-        android:id="@+id/editTextText4"
-        android:layout_width="296dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="8dp"
-        android:focusableInTouchMode="false"
-        android:focusable="false"
-        android:ems="10"
-        android:text="이미지 선택"
-        android:textColor="#000000"
-        android:textColorHint="#000000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextText3" />
 
+    <EditText
+        android:id="@+id/editTextText5"
+        android:layout_width="298dp"
+        android:layout_height="144dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="36dp"
+        android:ems="10"
+        android:hint="메세지"
+        android:inputType="text"
+        android:textColor="#626161"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextText4" />
 
     <ImageButton
         android:id="@+id/report_button"
@@ -103,18 +98,22 @@
         app:layout_constraintTop_toBottomOf="@id/editTextText4" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/editTextText4"
         android:layout_width="296dp"
         android:layout_height="50dp"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="자전거 번호"
-        android:textColorHint="#000000"
-        android:inputType="text"
-        android:textColor="#000000"
+        android:hint="이미지 선택"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:clickable="true"
+        android:cursorVisible="false"
+        android:inputType="none"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextText" />
+        app:layout_constraintTop_toBottomOf="@id/editTextText3" />
+
+
 
     <ImageView
         android:id="@+id/reporttypebtn"
@@ -143,8 +142,8 @@
         android:id="@+id/menu"
         android:layout_width="69dp"
         android:layout_height="49dp"
-        android:layout_marginStart="304dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="288dp"
+        android:layout_marginTop="32dp"
         android:background="#4BFFFFFF"
         android:contentDescription="@string/menu_button_description"
         android:src="@drawable/menu"

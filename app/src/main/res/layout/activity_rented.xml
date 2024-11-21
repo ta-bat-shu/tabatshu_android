@@ -23,8 +23,9 @@
 
     <ImageView
         android:id="@+id/mileage"
-        android:layout_width="375dp"
-        android:layout_height="258.93dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
         android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,13 +57,13 @@
         app:srcCompat="@drawable/cushing_cmt" />
 
     <ImageButton
-        android:id="@+id/rent_bike"
+        android:id="@+id/rented_bike"
         android:layout_width="170dp"
         android:layout_height="170dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/rent_bike"
+        android:src="@drawable/rented_bike"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintHorizontal_bias="0.578"
         app:layout_constraintStart_toEndOf="@+id/find_bike"
         app:layout_constraintTop_toBottomOf="@+id/mileage"
         tools:ignore="SpeakableTextPresentCheck" />

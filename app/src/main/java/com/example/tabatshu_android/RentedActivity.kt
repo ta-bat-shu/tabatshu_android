@@ -1,34 +1,34 @@
 package com.example.tabatshu_android
 
-import android.content.Context
 import android.content.Intent
-import android.widget.TextView
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.util.Log
+import android.view.MenuItem
 import android.view.View
+import android.widget.ImageButton
+import android.widget.PopupMenu
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.widget.ImageButton
-import android.view.MenuItem
-import android.view.Menu
-import android.widget.PopupMenu
-import android.widget.Toast
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.widget.ImageView
-import android.widget.LinearLayout
+import org.json.JSONObject
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
+import kotlin.concurrent.thread
 
-
-class HomeActivity : AppCompatActivity() {
-
+class RentedActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_rented)
 
         // 상태바 색상 변경
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -53,11 +53,10 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // QR 코드 버튼 추가
-        val qrButton = findViewById<ImageButton>(R.id.rent_bike)
-        qrButton.setOnClickListener {
-            val intent = Intent(this, QRCodeScannerActivity::class.java)
-            startActivity(intent)
+        // QR 코드 버튼 추가 (반납 기능)
+        val returnButton = findViewById<ImageButton>(R.id.rented_bike)
+        returnButton.setOnClickListener {
+            returnBikeToServer()
         }
 
         // 메뉴 버튼 추가
@@ -92,8 +91,6 @@ class HomeActivity : AppCompatActivity() {
         }
         popupMenu.show()
     }
-
-
 
     // 메뉴 항목 선택 시 동작
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -132,5 +129,60 @@ class HomeActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-}
 
+    // 자전거 반납 요청
+    private fun returnBikeToServer() {
+        val bikeId = GlobalVariables.bike_id
+        val userId = GlobalVariables.user_id
+
+        if (bikeId.isNullOrBlank() || userId.isNullOrBlank()) {
+            Toast.makeText(this, "자전거 또는 사용자 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        thread {
+            try {
+                val url = URL("http://192.168.1.115:5000/return_bike")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "POST"
+                connection.doOutput = true
+                connection.setRequestProperty("Content-Type", "application/json")
+
+                val jsonObject = JSONObject().apply {
+                    put("bike_id", bikeId)
+                    put("user_id", userId)
+                }
+
+                OutputStreamWriter(connection.outputStream).apply {
+                    write(jsonObject.toString())
+                    flush()
+                }
+
+                val responseCode = connection.responseCode
+                runOnUiThread {
+                    if (responseCode == 200) {
+                        Toast.makeText(this, "자전거가 성공적으로 반납되었습니다.", Toast.LENGTH_SHORT).show()
+                        GlobalVariables.bike_id = null // bike_id 초기화
+                        finish()
+                    } else {
+                        Log.d("ReturnBikeTask", "Request: bike_id = $bikeId, user_id = $userId")
+                        Toast.makeText(this, "반납 실패: 서버 오류 ($responseCode)", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this, "반납 중 오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+
+    // HomeActivity로 이동
+    private fun navigateToHomeActivity() {
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+}

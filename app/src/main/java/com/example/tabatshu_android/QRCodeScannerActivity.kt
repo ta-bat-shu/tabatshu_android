@@ -10,12 +10,14 @@ import android.content.pm.PackageManager
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.tabatshu_android.GlobalVariables.user_id
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import org.json.JSONObject
@@ -36,12 +38,11 @@ class QRCodeScannerActivity : AppCompatActivity() {
     private val BLUETOOTH_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     private val DEVICE_ADDRESS = "00:22:08:31:20:DF" // 블루투스 모듈의 MAC 주소로 변경
 
-    // 런타임 권한 요청
     private val requestBluetoothPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         if (permissions[Manifest.permission.BLUETOOTH_CONNECT] == true) {
-            connectToBluetoothDevice()
+            connectToBluetoothDevice { }
         } else {
             Toast.makeText(this, "블루투스 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
         }
@@ -55,13 +56,6 @@ class QRCodeScannerActivity : AppCompatActivity() {
 
         // MediaPlayer 초기화
         mediaPlayer = MediaPlayer.create(this, R.raw.alert)
-
-        // 권한 요청 및 Bluetooth 연결
-        if (checkBluetoothPermissions()) {
-            connectToBluetoothDevice()
-        } else {
-            requestBluetoothPermissions()
-        }
 
         // QR 코드 스캔 시작
         startQRCodeScan()
@@ -77,58 +71,6 @@ class QRCodeScannerActivity : AppCompatActivity() {
         }
         integrator.initiateScan()
     }
-
-    private fun checkBluetoothPermissions(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
-        } else {
-            true
-        }
-    }
-
-    private fun requestBluetoothPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            requestBluetoothPermissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.BLUETOOTH_CONNECT,
-                    Manifest.permission.BLUETOOTH_SCAN
-                )
-            )
-        }
-    }
-
-    private fun connectToBluetoothDevice() {
-        try {
-            // Android 12 이상인 경우 권한 확인
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.BLUETOOTH_CONNECT
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    // 권한 요청 필요
-                    Toast.makeText(this, "Bluetooth 연결 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
-                    requestBluetoothPermissions() // 권한 요청
-                    return // 권한이 없으므로 연결 시도 중단
-                }
-            }
-
-            // 권한이 확인되었으면 블루투스 연결 시도
-            val device: BluetoothDevice? = bluetoothAdapter?.getRemoteDevice(DEVICE_ADDRESS)
-            device?.let {
-                bluetoothSocket = it.createRfcommSocketToServiceRecord(BLUETOOTH_UUID)
-                bluetoothSocket?.connect()
-                Toast.makeText(this, "블루투스 연결 성공", Toast.LENGTH_SHORT).show()
-            } ?: Toast.makeText(this, "블루투스 기기를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
-        } catch (e: SecurityException) {
-            // 권한 문제로 인한 예외 처리
-            Toast.makeText(this, "Bluetooth 연결 권한이 없습니다.", Toast.LENGTH_SHORT).show()
-        } catch (e: IOException) {
-            // 블루투스 연결 실패 처리
-            Toast.makeText(this, "Bluetooth 연결에 실패했습니다.", Toast.LENGTH_SHORT).show()
-        }
-    }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -179,11 +121,13 @@ class QRCodeScannerActivity : AppCompatActivity() {
                 try {
                     val jsonResponse = JSONObject(responseMessage)
                     val status = jsonResponse.getString("status")
-                    val message = jsonResponse.getString("message")
                     val bikeId = jsonResponse.optString("bike_id", null)
 
                     if (status == "success") {
-                        showRentalConfirmationDialog(bikeId ?: "")
+                        // QR 코드가 정상일 경우 블루투스 연결 후 대여
+                        connectToBluetoothDevice {
+                            showRentalConfirmationDialog(bikeId ?: "")
+                        }
                     } else {
                         handleInvalidQRCode()
                     }
@@ -199,6 +143,61 @@ class QRCodeScannerActivity : AppCompatActivity() {
     private fun handleInvalidQRCode() {
         Toast.makeText(this, "잘못된 QR코드입니다(큐싱피해주의).", Toast.LENGTH_LONG).show()
         showReportConfirmationDialog()
+    }
+
+    private fun connectToBluetoothDevice(onConnected: () -> Unit) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    requestBluetoothPermissions()
+                    return
+                }
+            }
+
+            val device: BluetoothDevice? = bluetoothAdapter?.getRemoteDevice(DEVICE_ADDRESS)
+            device?.let {
+                bluetoothSocket = it.createRfcommSocketToServiceRecord(BLUETOOTH_UUID)
+                bluetoothSocket?.connect()
+                Toast.makeText(this, "블루투스 연결 성공", Toast.LENGTH_SHORT).show()
+                onConnected()
+            } ?: Toast.makeText(this, "블루투스 기기를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+        } catch (e: IOException) {
+            Toast.makeText(this, "Bluetooth 연결에 실패했습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun requestBluetoothPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            requestBluetoothPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.BLUETOOTH_SCAN
+                )
+            )
+        }
+    }
+
+    private fun showRentalConfirmationDialog(bikeId: String) {
+        val dialogBuilder = AlertDialog.Builder(this)
+        dialogBuilder.setMessage("자전거 일련번호: $bikeId\n이 자전거를 대여하시겠습니까?")
+            .setCancelable(false)
+            .setPositiveButton("예") { dialog, _ ->
+                RentBikeTask().execute(bikeId)
+                dialog.dismiss()
+            }
+            .setNegativeButton("아니오") { dialog, _ ->
+                dialog.dismiss()
+                Toast.makeText(this, "취소되었습니다.", Toast.LENGTH_LONG).show()
+                navigateToHomeActivity()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("대여 확인")
+        alert.show()
     }
 
     private fun showReportConfirmationDialog() {
@@ -227,32 +226,25 @@ class QRCodeScannerActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun showRentalConfirmationDialog(bikeId: String) {
-        val dialogBuilder = AlertDialog.Builder(this)
-        dialogBuilder.setMessage("자전거 일련번호: $bikeId\n이 자전거를 대여하시겠습니까?")
-            .setCancelable(false)
-            .setPositiveButton("예") { dialog, _ ->
-                RentBikeTask().execute(bikeId)
-                dialog.dismiss()
-            }
-            .setNegativeButton("아니오") { dialog, _ ->
-                dialog.dismiss()
-                Toast.makeText(this, "취소되었습니다.", Toast.LENGTH_LONG).show()
-                navigateToHomeActivity()
-            }
-
-        val alert = dialogBuilder.create()
-        alert.setTitle("대여 확인")
-        alert.show()
+    private fun navigateToHomeActivity() {
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
     }
 
     private inner class RentBikeTask : AsyncTask<String, Void, Int?>() {
+        private var bikeId: String? = null // 멤버 변수로 선언
+
         override fun doInBackground(vararg params: String?): Int? {
-            val bikeId = params[0] ?: return null
+            bikeId = params[0] // bikeId 저장
+            val userId = GlobalVariables.user_id ?: return null // Null 체크
+
             val url = URL("http://192.168.1.115:5000/rent_bike")
 
             val jsonObject = JSONObject().apply {
-                put("bikeId", bikeId)
+                put("bike_id", bikeId)
+                put("user_id", userId)
             }
 
             return try {
@@ -268,6 +260,7 @@ class QRCodeScannerActivity : AppCompatActivity() {
 
                 connection.responseCode
             } catch (e: Exception) {
+                Log.e("QRCodeScannerActivity", "Error in RentBikeTask: ${e.message}")
                 null
             }
         }
@@ -275,23 +268,19 @@ class QRCodeScannerActivity : AppCompatActivity() {
         override fun onPostExecute(responseCode: Int?) {
             super.onPostExecute(responseCode)
             if (responseCode == 200) {
-                try {
-                    bluetoothSocket?.outputStream?.write("U".toByteArray())
-                    Toast.makeText(this@QRCodeScannerActivity, "대여가 완료되었습니다.", Toast.LENGTH_LONG).show()
-                    navigateToHomeActivity()
-                } catch (e: IOException) {
-                    Toast.makeText(this@QRCodeScannerActivity, "Bluetooth 전송 실패", Toast.LENGTH_LONG).show()
-                }
+                GlobalVariables.bike_id = bikeId // bikeId 저장
+                Log.d("QRCodeScannerActivity", "bike_id set to: ${GlobalVariables.bike_id}, user_id: ${GlobalVariables.user_id}")
+                Toast.makeText(this@QRCodeScannerActivity, "대여가 완료되었습니다.", Toast.LENGTH_LONG).show()
+                navigateToRentedActivity()
             } else {
-                handleInvalidQRCode()
+                Toast.makeText(this@QRCodeScannerActivity, "대여 실패: 서버 오류", Toast.LENGTH_LONG).show()
             }
         }
-    }
 
-    private fun navigateToHomeActivity() {
-        val intent = Intent(this, HomeActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        finish()
+        private fun navigateToRentedActivity() {
+            val intent = Intent(this@QRCodeScannerActivity, RentedActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }
