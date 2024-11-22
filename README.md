@@ -58,7 +58,7 @@ btnLogin.setOnClickListener {
   - 성공 시 블루투스 장치를 통해 자전거 잠금을 해제하고 데이터베이스에서 사용자의 tf_rent와 자전거의 status가 대여중으로 바뀝니다.
     
 
-#### 핵심 코드
+#### 핵심 코드(`QRCodeScannerActicity.kt`)
 
 ```kotlin
 // QR 코드 스캔 시작
@@ -219,7 +219,7 @@ private inner class RentBikeTask : AsyncTask<String, Void, Int?>() {
   - 자전거 대여 과정에서 블루투스를 통해 자전거의 잠금을 해제합니다.
   - 사용자의 스마트폰과 자전거의 블루투스 모듈 간 연결을 설정하며, 연결 실패 시 적절한 오류 메시지를 제공합니다.
 
-#### 핵심 코드
+#### 핵심 코드(`QRCodeScannerActicity.kt`)
 
 ```kotlin
 // 블루투스 연결 시도
@@ -281,7 +281,7 @@ private fun sendDataToArduino(data: String) {
   - 서버가 요청을 성공적으로 처리하면 블루투스를 통해 자전거 잠금을 해제하고 반납 완료 상태를 아두이노로 전송합니다.
   - 반납 완료 후 블루투스 연결을 해제합니다.
 
-#### 핵심 코드
+#### 핵심 코드(`RentedActivity.kt`)
 
 ```kotlin
 // 자전거 반납 요청
@@ -372,8 +372,8 @@ private fun disconnectBluetooth() {
   - 데이터를 보기 쉽게 CardView 형태로 표현하며, 신고 정보에는 이미지와 텍스트 정보를 포함합니다.
   - 이와 동일한 로직을 다른 데이터(예: 사용자 정보, 자전거 대여/반납 기록)에도 재활용할 수 있습니다.
 
-#### 핵심 코드(신고 데이터 예시)
-
+#### 핵심 코드(`RescuecheckActivity.kt`)
+#### 신고 데이터 예시
 ```kotlin
 // 서버에서 신고 데이터를 가져오는 함수
 private fun fetchReportsFromServer() {
