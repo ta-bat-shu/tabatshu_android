@@ -181,6 +181,16 @@ class QRCodeScannerActivity : AppCompatActivity() {
         }
     }
 
+    private fun sendDataToArduino(data: String) {
+        try {
+            bluetoothSocket?.outputStream?.write(data.toByteArray())
+            Log.d("QRCodeScannerActivity", "Data sent to Arduino: $data")
+        } catch (e: IOException) {
+            Toast.makeText(this, "아두이노로 데이터 전송 실패", Toast.LENGTH_SHORT).show()
+            Log.e("QRCodeScannerActivity", "Error sending data to Arduino: ${e.message}")
+        }
+    }
+
     private fun showRentalConfirmationDialog(bikeId: String) {
         val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage("자전거 일련번호: $bikeId\n이 자전거를 대여하시겠습니까?")
@@ -271,6 +281,10 @@ class QRCodeScannerActivity : AppCompatActivity() {
                 GlobalVariables.bike_id = bikeId // bikeId 저장
                 Log.d("QRCodeScannerActivity", "bike_id set to: ${GlobalVariables.bike_id}, user_id: ${GlobalVariables.user_id}")
                 Toast.makeText(this@QRCodeScannerActivity, "대여가 완료되었습니다.", Toast.LENGTH_LONG).show()
+
+                // 아두이노로 'U' 전송
+                sendDataToArduino("U")
+
                 navigateToRentedActivity()
             } else {
                 Toast.makeText(this@QRCodeScannerActivity, "대여 실패: 서버 오류", Toast.LENGTH_LONG).show()

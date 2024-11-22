@@ -1,5 +1,7 @@
 package com.example.tabatshu_android
 
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothSocket
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -18,12 +20,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import org.json.JSONObject
+import java.io.IOException
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.UUID
 import kotlin.concurrent.thread
 
 class RentedActivity : AppCompatActivity() {
+
+    // Bluetooth 관련 변수 설정
+    private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+    private var bluetoothSocket: BluetoothSocket? = null
+    private val BLUETOOTH_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +41,12 @@ class RentedActivity : AppCompatActivity() {
 
         // 상태바 색상 변경
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = Color.parseColor("#FC9332") // 원하는 색상으로 변경
+            window.statusBarColor = Color.parseColor("#FC9332")
         }
 
         // 시스템 UI 플래그 설정 (아이콘 색상 조정)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // 아이콘을 어두운 색으로 설정
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -53,12 +62,6 @@ class RentedActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // QR 코드 버튼 추가 (반납 기능)
-        val returnButton = findViewById<ImageButton>(R.id.rented_bike)
-        returnButton.setOnClickListener {
-            returnBikeToServer()
-        }
-
         // 메뉴 버튼 추가
         val menuButton = findViewById<ImageButton>(R.id.menu)
         menuButton.setOnClickListener {
@@ -71,8 +74,12 @@ class RentedActivity : AppCompatActivity() {
             val intent = Intent(this, ReportActivity::class.java)
             startActivity(intent)
         }
+        // 반납 버튼 설정
+        val returnButton = findViewById<ImageButton>(R.id.rented_bike)
+        returnButton.setOnClickListener {
+            returnBikeToServer()
+        }
     }
-
     // PopupMenu를 표시하는 메서드
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(this, view, 0, 0, R.style.CustomPopupMenu)
@@ -130,6 +137,7 @@ class RentedActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
+
     // 자전거 반납 요청
     private fun returnBikeToServer() {
         val bikeId = GlobalVariables.bike_id
@@ -161,11 +169,12 @@ class RentedActivity : AppCompatActivity() {
                 val responseCode = connection.responseCode
                 runOnUiThread {
                     if (responseCode == 200) {
+                        sendDataToArduino("R") // 반납 완료 후 "R" 전송
+                        disconnectBluetooth() // 블루투스 연결 해제
                         Toast.makeText(this, "자전거가 성공적으로 반납되었습니다.", Toast.LENGTH_SHORT).show()
-                        GlobalVariables.bike_id = null // bike_id 초기화
+                        GlobalVariables.bike_id = null
                         finish()
                     } else {
-                        Log.d("ReturnBikeTask", "Request: bike_id = $bikeId, user_id = $userId")
                         Toast.makeText(this, "반납 실패: 서버 오류 ($responseCode)", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -177,12 +186,30 @@ class RentedActivity : AppCompatActivity() {
         }
     }
 
+    // 아두이노로 데이터 전송
+    private fun sendDataToArduino(data: String) {
+        try {
+            // 기존 블루투스 연결을 활용하여 데이터 전송
+            if (bluetoothSocket?.isConnected == true) {
+                bluetoothSocket?.outputStream?.write(data.toByteArray())
+                Log.d("RentedActivity", "Data sent to Arduino: $data")
+            } else {
+                Log.e("RentedActivity", "Bluetooth socket is not connected")
+            }
+        } catch (e: IOException) {
+            Log.e("RentedActivity", "Error sending data to Arduino: ${e.message}")
+            Toast.makeText(this, "아두이노로 데이터 전송 실패", Toast.LENGTH_SHORT).show()
+        }
+    }
 
-
-    // HomeActivity로 이동
-    private fun navigateToHomeActivity() {
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
-        finish()
+    // 블루투스 연결 해제
+    private fun disconnectBluetooth() {
+        try {
+            bluetoothSocket?.close()
+            bluetoothSocket = null
+            Log.d("RentedActivity", "Bluetooth connection closed")
+        } catch (e: IOException) {
+            Log.e("RentedActivity", "Error disconnecting Bluetooth: ${e.message}")
+        }
     }
 }
