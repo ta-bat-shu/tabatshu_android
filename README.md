@@ -1,54 +1,78 @@
 # 🚲 큐싱 방지 자전거 대여 앱 제작
-<ul>
- <li> 이 문서는 자전거 대여 및 관리 시스템을 사용자가 보다 쉽게 사용할 수 있도록 구현된 어플리케이션입니다.</li>
- <li>Kotlin을 사용하여 코드 작성되었습니다.</li>
-</ul>
-<h2>📖 목차</h2>
-<h3>기능 및 사용 라이브러리</h3>
-<ol>
- <li>Zxing 라이브러리</li>
- <li>Mediaplayer</li>
- <li>PopupMenu</li>
- <li>Toast 메세지</li>
- <li>AlertDialog</li>
- <li>사진 촬영 기능</li>
-</ol>
-<h2>기능 및 사용 라이브러리</h2>
-<h3>Zxing 라이브러리</h3>
-<ul>
- <li>QR 코드를 스캔하여 데이터를 처리</li>
- <li>QR 스캔 기능을 IntentIntegrator를 사용해 구현</li>
- <li>유효성 검사 및 결과에 따라 화면 이동 및 경고음 재생</li>
- <li>startQRCodeScan() : QR 코드 스캔 시작, isFakeQRCode() : QR 코드의 유효성 판단</li>
-</ul>
-<h3>Mediaplayer</h3>
-<ul>
- <li>QR 코드가 유효하지 않을 경우, 경고음을 재생</li>
- <li>Mediaplayer.create(Context, Int)로 경고음 파일 호출</li>
- <li>경고음 재생, 일시 중지, 해제 기능</li>
- <li>start(), pause(), stop(), release()</li>
-</ul>
-<h3>PopupMenu</h3>
-<ul>
- <li>메뉴 버튼 및 팝업 기능을 제공</li>
- <li>메뉴 항목 선택에 따른 동작 정의</li>
- <li>UI 텍스트 및 색상 커스터 마이징</li>
-</ul>
-<h3>Toast 메세지</h3>
-<ul>
- <li>알림 메세지를 화면에 표시</li>
- <li>Toast.makeText()를 통해 간단한 메세지 출력</li>
-</ul>
-<h3>AlertDialog</h3>
-<ul>
- <li>사용자 확인 요청 및 경고 메세지 제공</li>
- <li>커스텀 스타일 및 확인 버튼 설정</li>
-</ul>
-<h3>사진 촬영 기능</h3>
-<ul>
- <li>카메라를 이용한 사진 촬영 및 경로 저장</li>
- <li>dispatchTakePictureIntent()를 사용하여 사진 촬영 Intent 구현</li>
-</ul>
+
+- 이 문서는 자전거 대여 및 관리 시스템을 사용자가 보다 쉽게 사용할 수 있도록 구현된 어플리케이션입니다.
+- Kotlin을 사용하여 코드 작성되었습니다.
+
+
+## 📖 목차
+
+### **기능 및 사용 라이브러리**
+1. Zxing 라이브러리
+2. Mediaplayer
+3. PopupMenu
+4. Toast 메시지
+5. AlertDialog
+6. 사진 촬영 기능
+
+### **MVP 기능**
+1. 로그인 기능
+2. 자전거 대여 기능 및 블루투스 연결
+3. 자전거 반납
+4. 관리자 화면에서 각종 데이터 조회
+
+### **아두이노**
+1. 설명
+2. 코드
+
+---
+## 기능 및 사용 라이브러리
+
+### **Zxing 라이브러리**
+- QR 코드를 스캔하여 데이터를 처리
+- QR 스캔 기능을 `IntentIntegrator`를 사용해 구현
+- 유효성 검사 및 결과에 따라 화면 이동 및 경고음 재생
+- **주요 함수**:
+  - `startQRCodeScan()`: QR 코드 스캔 시작
+  - `isFakeQRCode()`: QR 코드의 유효성 판단
+
+---
+
+### **Mediaplayer**
+- QR 코드가 유효하지 않을 경우 경고음을 재생
+- `Mediaplayer.create(Context, Int)`로 경고음 파일 호출
+- 경고음 재생, 일시 중지, 해제 기능
+- **주요 함수**:
+  - `start()`: 경고음 재생
+  - `pause()`: 재생 일시 중지
+  - `stop()`: 재생 중단
+  - `release()`: 리소스 해제
+
+---
+
+### **PopupMenu**
+- 메뉴 버튼 및 팝업 기능을 제공
+- 메뉴 항목 선택에 따른 동작 정의
+- UI 텍스트 및 색상 커스터 마이징
+
+---
+
+### **Toast 메시지**
+- 알림 메시지를 화면에 표시
+- `Toast.makeText()`를 통해 간단한 메시지 출력
+
+---
+
+### **AlertDialog**
+- 사용자 확인 요청 및 경고 메시지 제공
+- 커스텀 스타일 및 확인 버튼 설정
+
+---
+
+### **사진 촬영 기능**
+- 카메라를 이용한 사진 촬영 및 경로 저장
+- `dispatchTakePictureIntent()`를 사용하여 사진 촬영 Intent 구현
+
+---
 
 
 ## MVP 기능
@@ -539,4 +563,60 @@ private fun displayReports(reports: List<Report>) {
 private fun Int.dpToPx(): Int {
     return (this * resources.displayMetrics.density).toInt()
 }
+```
+
+## 아두이노 코드: 자전거 잠금/해제
+
+### **설명**
+- **기능**:
+  - 스마트폰과 HC-05모듈 Master-Slave 방식으로 연결.
+  - 자전거 대여 시 `'U'` 명령을 수신하여 잠금을 해제.
+  - 자전거 반납 시 `'R'` 명령을 수신하여 잠금을 설정.
+- **하드웨어**: 서보모터를 사용하여 잠금/해제 동작을 구현.
+
+### **코드**
+
+```cpp
+#include <Servo.h>  // 서보모터 제어를 위한 라이브러리
+
+Servo myServo;      // 서보모터 객체 생성
+
+int servoPin = 2;   // 서보모터가 연결된 핀
+unsigned long lastReceivedTime = 0; // 마지막 데이터 수신 시간
+
+void setup() {
+  // 시리얼 통신 시작
+  Serial.begin(9600);  // 하드웨어 시리얼 포트(RX, TX) 사용
+  
+  // 서보모터 핀 초기화
+  myServo.attach(servoPin);  // 2번 핀에 서보모터 연결
+  Serial.println("블루투스 연결 대기...");
+  myServo.write(90);  // 서보모터를 초기 위치로 설정
+}
+
+void loop() {
+  // 블루투스 데이터 수신 확인
+  if (Serial.available()) {  
+    char incomingData = Serial.read();  // 수신된 데이터 읽기
+
+    Serial.print("수신된 데이터: ");
+    Serial.println(incomingData);
+
+    // 'U' 명령: 서보모터 90도 이동
+    if (incomingData == 'U') {
+      Serial.println("서보모터 90도 이동 중...");
+      myServo.write(0);  // 90도 위치로 이동
+      delay(1000);
+      myServo.write(90);
+    }
+    // 'R' 명령 : 서보모터 제자리로 이동
+    else if (incomingData == 'R') {
+      Serial.println("서보모터 제자리로 이동 중...");
+      myServo.write(90);
+      delay(1000);
+    }
+  }
+}
+```
+
 
