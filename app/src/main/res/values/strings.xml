@@ -4,5 +4,12 @@
     <string name="menu_button_description">메뉴 버튼</string> <!-- 여기에 추가 -->
     <string name="report_button_description">신고하기 버튼</string>
     <string name="take_photo">사진 촬영</string>
+    <string-array name="report_types">
+        <item>잠금잠치 고장</item>
+        <item>단말기 고장</item>
+        <item>브레이크 고장</item>
+        <item>바퀴 고장</item>
+        <item>기타</item>
+    </string-array>
 </resources>
 

@@ -15,28 +15,18 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.005"
+        app:layout_constraintVertical_bias="0.053"
         app:srcCompat="@drawable/up_tab" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="80dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/reportbase" />
 
     <EditText
         android:id="@+id/editTextText5"
         android:layout_width="298dp"
         android:layout_height="144dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="메세지"
         android:inputType="text"
@@ -47,8 +37,8 @@
         android:id="@+id/editTextText"
         android:layout_width="296dp"
         android:layout_height="50dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="136dp"
         android:ems="10"
         android:hint="Name"
         android:inputType="text"
@@ -59,10 +49,9 @@
         android:id="@+id/editTextText3"
         android:layout_width="296dp"
         android:layout_height="50dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
-        android:hint="신고 유형"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextText2" />
@@ -71,8 +60,8 @@
         android:id="@+id/editTextText4"
         android:layout_width="296dp"
         android:layout_height="50dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="이미지 선택"
         android:inputType="text"
@@ -83,7 +72,7 @@
         android:id="@+id/report_button"
         android:layout_width="350dp"
         android:layout_height="120dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="152dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/report_button_description"
         android:src="@drawable/reportbutton"
@@ -96,31 +85,33 @@
         android:id="@+id/editTextText2"
         android:layout_width="296dp"
         android:layout_height="50dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextText" />
 
-    <ImageView
+    <Spinner
         android:id="@+id/reporttypebtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="300dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="302dp"
+        android:layout_height="58dp"
+        android:hint="신고 유형"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.394"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextText3"
-        app:srcCompat="@drawable/reporttypebtn" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.344" />
 
     <ImageButton
         android:id="@+id/imgphotobtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="300dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="296dp"
+        android:layout_marginTop="4dp"
         android:background="#FFFFFF"
         android:contentDescription="@string/take_photo"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,11 +122,23 @@
         android:id="@+id/menu"
         android:layout_width="69dp"
         android:layout_height="49dp"
-        android:layout_marginStart="304dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="40dp"
         android:background="#4BFFFFFF"
         android:contentDescription="@string/menu_button_description"
         android:src="@drawable/menu"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="112dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/reportbase" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

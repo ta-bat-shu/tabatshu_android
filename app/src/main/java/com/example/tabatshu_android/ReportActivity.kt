@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.PopupMenu
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,11 +25,13 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import android.widget.ArrayAdapter
+
 
 class ReportActivity : AppCompatActivity() {
     private lateinit var nameEditText: EditText
     private lateinit var emailEditText: EditText
-    private lateinit var reportTypeEditText: EditText
+    private lateinit var reportTypeSpinner: Spinner
     private lateinit var imageSelectEditText: EditText
     private lateinit var messageEditText: EditText
     private lateinit var currentPhotoPath: String
@@ -36,6 +39,7 @@ class ReportActivity : AppCompatActivity() {
     companion object {
         const val REQUEST_TAKE_PHOTO = 1
         const val REQUEST_CAMERA_PERMISSION = 2
+        const val REQUEST_SELECT_PHOTO = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,9 +60,17 @@ class ReportActivity : AppCompatActivity() {
         // EditText 초기화
         nameEditText = findViewById(R.id.editTextText)
         emailEditText = findViewById(R.id.editTextText2)
-        reportTypeEditText = findViewById(R.id.editTextText3)
+        reportTypeSpinner = findViewById(R.id.reporttypebtn) // Spinner 초기화
         imageSelectEditText = findViewById(R.id.editTextText4)
         messageEditText = findViewById(R.id.editTextText5)
+
+        // Spinner에 데이터 설정
+        val reportTypes = arrayOf("신고 유형", "잠금장치 고장", "단말기 고장", "브레이크 고장", "바퀴고장", "기타")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, reportTypes)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        reportTypeSpinner.adapter = adapter
+
+        reportTypeSpinner.setSelection(0)  // 첫 번째 항목인 "신고 유형"을 기본값으로 선택
 
         // 메뉴 버튼 추가
         val menuButton = findViewById<ImageButton>(R.id.menu)
@@ -72,7 +84,7 @@ class ReportActivity : AppCompatActivity() {
             // 입력 값 가져오기
             val name = nameEditText.text.toString().trim()
             val email = emailEditText.text.toString().trim()
-            val reportType = reportTypeEditText.text.toString().trim()
+            val reportType = reportTypeSpinner.selectedItem.toString().trim() // Spinner에서 선택한 값
             val imageSelect = imageSelectEditText.text.toString().trim()
             val message = messageEditText.text.toString().trim()
 
@@ -96,6 +108,12 @@ class ReportActivity : AppCompatActivity() {
         val imgPhotoButton = findViewById<ImageButton>(R.id.imgphotobtn)
         imgPhotoButton.setOnClickListener {
             checkCameraPermissionAndDispatchTakePictureIntent()
+        }
+
+        // 사진 선택 버튼 추가
+        val selectPhotoButton = findViewById<ImageButton>(R.id.imgphotobtn)
+        selectPhotoButton.setOnClickListener {
+            openGalleryForImage()
         }
     }
 
@@ -154,6 +172,11 @@ class ReportActivity : AppCompatActivity() {
         }
     }
 
+    private fun openGalleryForImage() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, REQUEST_SELECT_PHOTO)
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -171,10 +194,22 @@ class ReportActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            // 사진이 성공적으로 촬영된 경우, 경로를 EditText에 설정
-            findViewById<EditText>(R.id.editTextText4).setText(currentPhotoPath)
-            showToast("사진이 저장되었습니다: $currentPhotoPath")
+        when (requestCode) {
+            REQUEST_TAKE_PHOTO -> {
+                if (resultCode == RESULT_OK) {
+                    // 사진이 성공적으로 촬영된 경우, 경로를 EditText에 설정
+                    findViewById<EditText>(R.id.editTextText4).setText(currentPhotoPath)
+                    showToast("사진이 저장되었습니다: $currentPhotoPath")
+                }
+            }
+            REQUEST_SELECT_PHOTO -> {
+                if (resultCode == RESULT_OK && data != null) {
+                    val selectedImageUri: Uri? = data.data
+                    // 선택된 사진의 URI를 EditText에 표시
+                    findViewById<EditText>(R.id.editTextText4).setText(selectedImageUri.toString())
+                    showToast("사진이 선택되었습니다.")
+                }
+            }
         }
     }
 
@@ -227,7 +262,6 @@ class ReportActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
-
 
 
 
