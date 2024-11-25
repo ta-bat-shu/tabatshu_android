@@ -150,7 +150,7 @@ class RentedActivity : AppCompatActivity() {
 
         thread {
             try {
-                val url = URL("http://192.168.1.115:5000/return_bike")
+                val url = URL("http://172.20.10.3:5001/return_bike")
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "POST"
                 connection.doOutput = true

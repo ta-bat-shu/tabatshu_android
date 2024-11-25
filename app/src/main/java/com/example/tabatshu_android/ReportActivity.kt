@@ -13,10 +13,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.PopupMenu
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -38,8 +35,9 @@ import java.util.*
 
 class ReportActivity : AppCompatActivity() {
 
+    private lateinit var nameEditText: EditText
     private lateinit var emailEditText: EditText
-    private lateinit var reportTypeEditText: EditText
+    private lateinit var reportTypeSpinner: Spinner
     private lateinit var imageSelectEditText: EditText
     private lateinit var messageEditText: EditText
     private lateinit var currentPhotoPath: String
@@ -48,6 +46,7 @@ class ReportActivity : AppCompatActivity() {
     companion object {
         const val REQUEST_TAKE_PHOTO = 1
         const val REQUEST_CAMERA_PERMISSION = 2
+        const val REQUEST_SELECT_PHOTO = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +64,19 @@ class ReportActivity : AppCompatActivity() {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
 
-        // EditText 초기화
+        // EditText 및 Spinner 초기화
+        nameEditText = findViewById(R.id.editTextText)
         emailEditText = findViewById(R.id.editTextText2)
-        reportTypeEditText = findViewById(R.id.editTextText3)
+        reportTypeSpinner = findViewById(R.id.reporttypebtn)
         imageSelectEditText = findViewById(R.id.editTextText4)
         messageEditText = findViewById(R.id.editTextText5)
+
+        // Spinner 데이터 설정
+        val reportTypes = arrayOf("신고 유형", "잠금장치 고장", "큐싱 의심", "브레이크 고장", "바퀴 고장", "기타")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, reportTypes)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        reportTypeSpinner.adapter = adapter
+        reportTypeSpinner.setSelection(0) // 기본값 설정
 
         // 메뉴 버튼 및 신고 버튼 설정
         findViewById<ImageButton>(R.id.menu).setOnClickListener { showPopupMenu(it) }
@@ -77,31 +84,25 @@ class ReportActivity : AppCompatActivity() {
 
         // 사진 촬영 버튼 설정
         findViewById<ImageButton>(R.id.imgphotobtn).setOnClickListener {
-            Log.i("ReportActivity", "Take picture button clicked")
             checkCameraPermissionAndDispatchTakePictureIntent()
         }
     }
 
     private fun handleReportButtonClick() {
-        val bikeId = emailEditText.text.toString().trim()
-        val reportType = reportTypeEditText.text.toString().trim()
+        val name = nameEditText.text.toString().trim()
+        val email = emailEditText.text.toString().trim()
+        val reportType = reportTypeSpinner.selectedItem.toString().trim()
         val imageSelect = imageSelectEditText.text.toString().trim()
         val message = messageEditText.text.toString().trim()
 
         // 입력 검증
-        if (bikeId.isEmpty() || reportType.isEmpty() || imageSelect.isEmpty() || message.isEmpty()) {
+        if (name.isEmpty() || email.isEmpty() || reportType == "신고 유형" || imageSelect.isEmpty() || message.isEmpty()) {
             showToast("모든 항목을 입력하세요.")
             return
         }
 
         // 신고내역 전송 로직
-        sendReport(bikeId, message, reportType, photoURI)
-
-        // 신고 완료 Toast 메시지 표시
-        showToast("신고가 완료되었습니다.")
-
-        // 홈 화면으로 이동
-        startActivity(Intent(this, HomeActivity::class.java))
+        sendReport(name, email, reportType, message, photoURI)
     }
 
     private fun checkCameraPermissionAndDispatchTakePictureIntent() {
@@ -145,49 +146,40 @@ class ReportActivity : AppCompatActivity() {
 
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
             currentPhotoPath = absolutePath
-            Log.d("ReportActivity", "Image file path created: $currentPhotoPath")
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Log.d("ReportActivity", "Captured image path: $currentPhotoPath")
-            imageSelectEditText.setText(currentPhotoPath)
-            showToast("사진이 저장되었습니다: $currentPhotoPath")
-        } else {
-            Log.e("ReportActivity", "Failed to capture image")
-        }
-    }
-
-    private fun sendReport(bikeId: String, contents: String, reportType: String, imageUri: Uri) {
-        val bikeIdPart = bikeId.toRequestBody("text/plain".toMediaTypeOrNull())
-        val userIdPart = "user_id".toRequestBody("text/plain".toMediaTypeOrNull())
+    private fun sendReport(name: String, email: String, reportType: String, contents: String, imageUri: Uri?) {
+        // RequestBody 생성
+        val namePart = name.toRequestBody("text/plain".toMediaTypeOrNull())
+        val emailPart = email.toRequestBody("text/plain".toMediaTypeOrNull())
         val categoryPart = reportType.toRequestBody("text/plain".toMediaTypeOrNull())
         val contentsPart = contents.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val inputStream = contentResolver.openInputStream(imageUri)
-        val imagePart = inputStream?.let {
-            val requestBody = it.readBytes().toRequestBody("image/*".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("image", File(currentPhotoPath).name, requestBody)
+        val imagePart = imageUri?.let {
+            val inputStream = contentResolver.openInputStream(it)
+            val requestBody = inputStream?.readBytes()?.toRequestBody("image/*".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("image", File(currentPhotoPath).name, requestBody!!)
         }
 
+        // API 호출
         val apiService = retrofit.create(ApiService::class.java)
-        val call = apiService.addReport(bikeIdPart, userIdPart, categoryPart, contentsPart, imagePart)
+        val call = apiService.addReport(namePart, emailPart, categoryPart, contentsPart, imagePart)
+
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     showToast("신고가 성공적으로 전송되었습니다.")
-                    Log.d("ReportActivity", "Response success: ${response.body()?.string()}")
+                    val intent = Intent(this@ReportActivity, HomeActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 } else {
                     showToast("신고 전송에 실패했습니다.")
-                    Log.e("ReportActivity", "Response error: ${response.errorBody()?.string()}")
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 showToast("네트워크 오류가 발생했습니다.")
-                Log.e("ReportActivity", "Network error: ${t.message}")
             }
         })
     }
@@ -209,10 +201,13 @@ class ReportActivity : AppCompatActivity() {
                     showToast("나의 정보 선택")
                     true
                 }
+                R.id.menu_item_report -> {
+                    showToast("신고하기 선택")
+                    true
+                }
                 else -> false
             }
         }
-
         popupMenu.show()
     }
 

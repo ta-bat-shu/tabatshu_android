@@ -16,7 +16,7 @@ object RetrofitClient {
         .build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.1.115:5000") // Flask 서버 URL
+        .baseUrl("http://172.20.10.3:5001") // Flask 서버 URL
         .client(client) // OkHttpClient 추가
         .addConverterFactory(GsonConverterFactory.create())
         .build()

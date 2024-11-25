@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Retrofit 초기화
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.115:5000") // 서버 주소
+            .baseUrl("http://172.20.10.3:5001") // 서버 주소
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
