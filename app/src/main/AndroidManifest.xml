@@ -6,7 +6,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -21,10 +25,16 @@
         android:theme="@style/Theme.Tabatshu_android"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".HelpActivity"
+            android:name=".qsinginformationActivity"
             android:exported="false" />
         <activity
-            android:name=".ServiceActivity"
+            android:name=".QshingImformationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ServiceImformationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HelpActivity"
             android:exported="false" />
         <activity
             android:name=".ChargeActivity"
@@ -82,7 +92,8 @@
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
-            tools:replace="android:screenOrientation" /> <!-- 촬영된 사진을 저장하는 프로바이더 -->
+            tools:replace="android:screenOrientation" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.tabatshu_android.fileprovider"

@@ -12,7 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.ImageButton
 import android.view.MenuItem
-import android.view.Menu
 import android.widget.PopupMenu
 import android.widget.Toast
 import android.text.SpannableString
@@ -108,7 +107,7 @@ class HomeActivity : AppCompatActivity() {
             }
             R.id.menu_item_service -> {
                 showToast("서비스 안내 선택")
-                val intent = Intent(this, ServiceActivity::class.java)
+                val intent = Intent(this, ServiceImformationActivity::class.java)
                 startActivity(intent)
                 true
             }
