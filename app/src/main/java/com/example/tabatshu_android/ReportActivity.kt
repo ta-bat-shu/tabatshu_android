@@ -13,6 +13,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -46,7 +47,6 @@ class ReportActivity : AppCompatActivity() {
     companion object {
         const val REQUEST_TAKE_PHOTO = 1
         const val REQUEST_CAMERA_PERMISSION = 2
-        const val REQUEST_SELECT_PHOTO = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,12 +71,42 @@ class ReportActivity : AppCompatActivity() {
         imageSelectEditText = findViewById(R.id.editTextText4)
         messageEditText = findViewById(R.id.editTextText5)
 
+        emailEditText.setText(GlobalVariables.user_id)
+        // Spinner 데이터 설정
         // Spinner 데이터 설정
         val reportTypes = arrayOf("신고 유형", "잠금장치 고장", "큐싱 의심", "브레이크 고장", "바퀴 고장", "기타")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, reportTypes)
+        val adapter = object : ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, reportTypes) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val textView = view.findViewById<TextView>(android.R.id.text1)
+
+                // 기본값(힌트)일 때 연회색, 선택된 값일 때 #595959
+                if (position == 0) {
+                    textView.setTextColor(Color.parseColor("#A7A7A7")) // 연회색 (힌트 색상)
+                } else {
+                    textView.setTextColor(Color.parseColor("#595959")) // 입력된 값 색상
+                }
+                return view
+            }
+
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent)
+                val textView = view.findViewById<TextView>(android.R.id.text1)
+
+                // 드롭다운에서 기본값(힌트)은 연회색, 나머지는 기본 색상
+                if (position == 0) {
+                    textView.setTextColor(Color.parseColor("#C0C0C0")) // 연회색 (힌트 색상)
+                } else {
+                    textView.setTextColor(Color.parseColor("#595959")) // 선택 가능한 값 색상
+                }
+                return view
+            }
+        }
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         reportTypeSpinner.adapter = adapter
         reportTypeSpinner.setSelection(0) // 기본값 설정
+
+
 
         // 메뉴 버튼 및 신고 버튼 설정
         findViewById<ImageButton>(R.id.menu).setOnClickListener { showPopupMenu(it) }
@@ -103,6 +133,12 @@ class ReportActivity : AppCompatActivity() {
 
         // 신고내역 전송 로직
         sendReport(name, email, reportType, message, photoURI)
+
+        // 신고 완료 Toast 메시지 표시
+        showToast("신고가 완료되었습니다.")
+
+        // 홈 화면으로 이동
+        startActivity(Intent(this, HomeActivity::class.java))
     }
 
     private fun checkCameraPermissionAndDispatchTakePictureIntent() {
@@ -146,11 +182,23 @@ class ReportActivity : AppCompatActivity() {
 
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
             currentPhotoPath = absolutePath
+            Log.d("ReportActivity", "Image file path created: $currentPhotoPath")
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            Log.d("ReportActivity", "Captured image path: $currentPhotoPath")
+            imageSelectEditText.setText(currentPhotoPath)
+            imageSelectEditText.setTextColor(Color.parseColor("#595959"))
+            showToast("사진이 저장되었습니다: $currentPhotoPath")
+        } else {
+            Log.e("ReportActivity", "Failed to capture image")
         }
     }
 
     private fun sendReport(name: String, email: String, reportType: String, contents: String, imageUri: Uri?) {
-        // RequestBody 생성
         val namePart = name.toRequestBody("text/plain".toMediaTypeOrNull())
         val emailPart = email.toRequestBody("text/plain".toMediaTypeOrNull())
         val categoryPart = reportType.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -162,7 +210,6 @@ class ReportActivity : AppCompatActivity() {
             MultipartBody.Part.createFormData("image", File(currentPhotoPath).name, requestBody!!)
         }
 
-        // API 호출
         val apiService = retrofit.create(ApiService::class.java)
         val call = apiService.addReport(namePart, emailPart, categoryPart, contentsPart, imagePart)
 
@@ -201,13 +248,10 @@ class ReportActivity : AppCompatActivity() {
                     showToast("나의 정보 선택")
                     true
                 }
-                R.id.menu_item_report -> {
-                    showToast("신고하기 선택")
-                    true
-                }
                 else -> false
             }
         }
+
         popupMenu.show()
     }
 
