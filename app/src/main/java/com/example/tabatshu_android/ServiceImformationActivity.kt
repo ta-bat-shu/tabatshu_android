@@ -7,81 +7,48 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
-import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.view.MenuItem
+import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.Toast
-import android.content.pm.PackageManager
-import android.net.Uri
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AlertDialog
+import android.widget.Button
 
-class HelpActivity : AppCompatActivity() {
+class ServiceImformationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_help)
-
-        // 전화 걸기 버튼 설정
-        val callbtn: ImageButton = findViewById(R.id.callbtn)
-        callbtn.setOnClickListener {
-            // 전화 걸기 전에 팝업 창 띄우기
-            showConfirmationDialog()
-        }
-
+        // 상태바 색상 변경
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = Color.parseColor("#FC9332") // 상태바 색상 변경
+            window.statusBarColor = Color.parseColor("#FC9332") // 원하는 색상으로 변경
         }
 
+        // 시스템 UI 플래그 설정 (아이콘 색상 조정)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // 아이콘을 어두운 색으로 설정
         }
+        setContentView(R.layout.activity_serviceimformation)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        // 메뉴 버튼 클릭 이벤트 설정
+        // 메뉴 버튼 추가
         val menuButton = findViewById<ImageButton>(R.id.menu)
         menuButton.setOnClickListener {
             showPopupMenu(it) // PopupMenu 열기
         }
-    }
 
-    // 전화 걸기 전 확인 팝업을 표시하는 메서드
-    private fun showConfirmationDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setMessage("관리자에게 전화하시겠습니까?")
-            .setCancelable(false)
-            .setPositiveButton("확인") { _, _ ->
-                // 전화번호를 "tel:"로 시작하는 문자열로 설정
-                val phoneNumber = "1655"  // 임시로 프론트담당 번호 씀
-
-                // 전화 걸기 인텐트 생성
-                val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNumber"))
-
-                // 전화 걸기 권한 확인
-                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                    startActivity(intent)  // 전화를 걸기
-                } else {
-                    // 권한이 없으면 권한 요청
-                    ActivityCompat.requestPermissions(this,
-                        arrayOf(android.Manifest.permission.CALL_PHONE), 1)
-                }
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()  // 팝업 닫기
-            }
-
-        val alert = builder.create()
-        alert.show()
+        // qudingbtn 클릭 리스너 추가
+        val qudingbtn = findViewById<ImageButton>(R.id.qshingbtn)
+        qudingbtn.setOnClickListener {
+            // qsinginformationActivity로 이동
+            val intent = Intent(this, qsinginformationActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     // PopupMenu를 표시하는 메서드
@@ -94,7 +61,7 @@ class HelpActivity : AppCompatActivity() {
             val menuItem = popupMenu.menu.getItem(i)
             val spannableTitle = SpannableString(menuItem.title)
             spannableTitle.setSpan(ForegroundColorSpan(Color.BLACK), 0, spannableTitle.length, 0)
-            menuItem.title = spannableTitle
+            menuItem.title = spannableTitle // 텍스트 색상을 검정으로 설정
         }
 
         popupMenu.setOnMenuItemClickListener { item ->
@@ -125,6 +92,7 @@ class HelpActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_item_report -> {
+                // 신고하기 선택 시 ReportActivity로 이동
                 showToast("신고하기 선택")
                 val intent = Intent(this, ReportActivity::class.java)
                 startActivity(intent)
@@ -145,4 +113,3 @@ class HelpActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
-

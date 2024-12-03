@@ -4,5 +4,6 @@
     <string name="menu_button_description">메뉴 버튼</string> <!-- 여기에 추가 -->
     <string name="report_button_description">신고하기 버튼</string>
     <string name="take_photo">사진 촬영</string>
+    <string name="title_activity_service_imformation">ServiceImformationActivity</string>
 </resources>
 

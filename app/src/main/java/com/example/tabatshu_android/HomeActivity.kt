@@ -109,7 +109,7 @@ class HomeActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_item_service -> {
-                val intent = Intent(this, ServiceActivity::class.java)
+                val intent = Intent(this, qsinginformationActivity::class.java)
                 startActivity(intent)
                 true
             }
