@@ -88,7 +88,7 @@ class QRCodeScannerActivity : AppCompatActivity() {
     private inner class URLValidationTask : AsyncTask<String, Void, Pair<Int?, String?>>() {
         override fun doInBackground(vararg params: String?): Pair<Int?, String?> {
             val scannedBikeId = params[0] ?: return Pair(null, null)
-            val url = URL("http://192.168.1.115:5001/check_bike")
+            val url = URL("http://172.20.10.4:5001/check_bike")
 
             val jsonObject = JSONObject().apply {
                 put("bike_id", scannedBikeId)
@@ -230,7 +230,7 @@ class QRCodeScannerActivity : AppCompatActivity() {
     }
 
     private fun navigateToReportActivity() {
-        val intent = Intent(this, ReportActivity::class.java)
+        val intent = Intent(this, ReprotActivity_qsing::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         finish()
@@ -250,7 +250,7 @@ class QRCodeScannerActivity : AppCompatActivity() {
             bikeId = params[0] // bikeId 저장
             val userId = GlobalVariables.user_id ?: return null // Null 체크
 
-            val url = URL("http://192.168.1.115:5001/rent_bike")
+            val url = URL("http://172.20.10.4:5001/rent_bike")
 
             val jsonObject = JSONObject().apply {
                 put("bike_id", bikeId)

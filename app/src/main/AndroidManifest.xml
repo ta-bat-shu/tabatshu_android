@@ -19,7 +19,6 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="33" />
 
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -33,6 +32,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tabatshu_android"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ReprotActivity_qsing"
+            android:exported="false" />
         <activity
             android:name=".ChargeActivity"
             android:exported="false" />
