@@ -9,16 +9,26 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="104dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.996"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@android:color/white" />
 
     <ImageView
         android:id="@+id/mileage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="375dp"
+        android:layout_height="258.93dp"
+        android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.163"
         app:srcCompat="@drawable/mileage" />
 
     <ImageView
@@ -37,81 +47,104 @@
         android:id="@+id/cusing_cmt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/find_bike"
-        app:layout_constraintVertical_bias="0.248"
         app:srcCompat="@drawable/cushing_cmt" />
 
     <ImageButton
         android:id="@+id/rent_bike"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/rent_bike"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintHorizontal_bias="0.542"
         app:layout_constraintStart_toEndOf="@+id/find_bike"
         app:layout_constraintTop_toBottomOf="@+id/mileage"
-        app:layout_constraintVertical_bias="0.116"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
         android:id="@+id/find_bike"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.077"
+        app:layout_constraintHorizontal_bias="0.029"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mileage"
-        app:layout_constraintVertical_bias="0.116"
         app:srcCompat="@drawable/find_bike"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageView
         android:id="@+id/under_tab"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+
+        app:layout_constraintTop_toBottomOf="@+id/cusing_cmt"
+        app:layout_constraintVertical_bias="0.542"
         app:srcCompat="@drawable/under_tab" />
 
     <ImageButton
         android:id="@+id/under_notify"
         android:layout_width="115dp"
-        android:layout_height="30dp"
+        android:layout_height="48dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="3dp"
-        app:layout_constraintBottom_toBottomOf="@+id/under_tab"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/under_tab"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/under_notify" />
+        app:layout_constraintTop_toBottomOf="@+id/cusing_cmt"
+        app:srcCompat="@drawable/under_notify"
+        tools:ignore="SpeakableTextPresentCheck" />
+
 
     <ImageButton
         android:id="@+id/under_customer"
         android:layout_width="115dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="3dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/under_tab"
         app:layout_constraintEnd_toEndOf="@+id/under_tab"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.867"
         app:layout_constraintStart_toStartOf="@+id/under_tab"
-        app:layout_constraintTop_toTopOf="@+id/under_tab"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/under_customer" />
+        app:srcCompat="@drawable/under_customer"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/cmt_notify"
+        android:layout_width="115dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/under_customer"
+        app:layout_constraintHorizontal_bias="0.302"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/under_notify"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageButton
+        android:id="@+id/menu"
+        android:layout_width="69dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="304dp"
+        android:layout_marginTop="8dp"
+        android:background="#4BFFFFFF"
+        android:contentDescription="@string/menu_button_description"
+        android:src="@drawable/menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

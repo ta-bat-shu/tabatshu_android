@@ -9,8 +9,8 @@
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
-        android:layout_width="359dp"
-        android:layout_height="884dp"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="-4dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="SpeakableTextPresentCheck"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
